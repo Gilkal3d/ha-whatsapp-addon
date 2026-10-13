@@ -75,7 +75,9 @@ const env = {
 };
 if (options.api_key) env.WHATSAPP_APIKEY = options.api_key;
 
-const waha = spawn("/entrypoint.sh", [], { env, stdio: "inherit" });
+// O entrypoint do WAHA roda `node dist/main` com caminho relativo,
+// então o cwd precisa ser /app (o WORKDIR original da imagem WAHA).
+const waha = spawn("/entrypoint.sh", [], { env, stdio: "inherit", cwd: "/app" });
 
 function shutdown(signal) {
   console.log(`[addon] ${signal} recebido, encerrando...`);
