@@ -3,8 +3,6 @@ name: Build add-on
 on:
   push:
     branches: [main]
-    paths:
-      - "waha_mqtt/**"
   workflow_dispatch:
 
 permissions:
