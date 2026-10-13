@@ -2,10 +2,10 @@ name: "WhatsApp Web (WAHA) + MQTT"
 version: "1.0.0"
 slug: waha_mqtt
 description: "Mantém uma sessão do WhatsApp Web e publica mensagens recebidas no MQTT do Home Assistant"
-url: "https://github.com/seu-usuario/ha-whatsapp-addon"
-# Descomente APÓS o primeiro build publicar a imagem no GHCR.
-# Com `image` o Supervisor baixa a imagem em vez de buildar localmente.
-# image: ghcr.io/seu-usuario/waha_mqtt
+url: "https://github.com/Gilkal3d/ha-whatsapp-addon"
+# Imagem publicada pelo GitHub Actions — o Supervisor baixa em vez de buildar.
+# Remova esta linha se quiser buildar localmente a partir do Dockerfile.
+image: ghcr.io/gilkal3d/waha_mqtt
 arch:
   - amd64
   - aarch64
