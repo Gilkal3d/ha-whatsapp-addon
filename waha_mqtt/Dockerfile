@@ -17,6 +17,10 @@ RUN npm install --omit=dev
 
 COPY run.js bridge.js ./
 
+# O entrypoint do WAHA roda `node dist/main` (caminho RELATIVO),
+# então o WORKDIR precisa voltar a ser /app, como na imagem oficial.
+WORKDIR /app
+
 # Mantém o tini do WAHA como PID 1 e roda nosso entrypoint
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["node", "/opt/addon/run.js"]
