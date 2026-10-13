@@ -1,0 +1,46 @@
+name: "WhatsApp Web (WAHA) + MQTT"
+version: "1.0.0"
+slug: waha_mqtt
+description: "Mantém uma sessão do WhatsApp Web e publica mensagens recebidas no MQTT do Home Assistant"
+url: "https://github.com/seu-usuario/ha-whatsapp-addon"
+# Descomente APÓS o primeiro build publicar a imagem no GHCR.
+# Com `image` o Supervisor baixa a imagem em vez de buildar localmente.
+# image: ghcr.io/seu-usuario/waha_mqtt
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: services
+boot: auto
+
+# Dashboard do WAHA dentro da UI do HA (sem abrir porta)
+ingress: true
+ingress_port: 3000
+panel_icon: mdi:whatsapp
+panel_title: "WhatsApp (WAHA)"
+
+# Porta direta (fallback / acesso externo)
+ports:
+  "3000/tcp": 3000
+ports_description:
+  "3000/tcp": "Dashboard WAHA (QR Code) - não usado no Ingress"
+
+options:
+  mqtt_host: core-mosquitto
+  mqtt_port: 1883
+  mqtt_user: ""
+  mqtt_password: ""
+  mqtt_topic: homeassistant/whatsapp/incoming
+  hook_events: message.received
+  api_key: ""
+  engine: WEBJS
+
+schema:
+  mqtt_host: str
+  mqtt_port: port
+  mqtt_user: str?
+  mqtt_password: password?
+  mqtt_topic: str
+  hook_events: list(message|message.received|message.any)
+  api_key: str?
+  engine: list(WEBJS|NOWEB|GOWS)

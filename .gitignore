@@ -1,0 +1,15 @@
+# Dependências locais
+node_modules/
+package-lock.json
+
+# Dados da sessão do WhatsApp (nunca versionar!)
+waha_data/
+*.waha/
+.wwebjs_auth/
+
+# Ambiente
+.env
+*.log
+
+# Build
+dist/

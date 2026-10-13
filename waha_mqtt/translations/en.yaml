@@ -1,0 +1,28 @@
+configuration:
+  mqtt_host:
+    name: Broker MQTT host
+    description: Hostname or IP of the MQTT broker (e.g. core-mosquitto)
+  mqtt_port:
+    name: Broker MQTT port
+    description: TCP port of the MQTT broker
+  mqtt_user:
+    name: MQTT username
+    description: Leave empty if the broker has no authentication
+  mqtt_password:
+    name: MQTT password
+    description: Password for the MQTT user
+  mqtt_topic:
+    name: MQTT output topic
+    description: Topic where incoming WhatsApp messages are published
+  hook_events:
+    name: WAHA hook event
+    description: WAHA event that triggers publishing to MQTT
+  api_key:
+    name: WAHA API key
+    description: Protects the WAHA dashboard and API. Leave empty to disable
+  engine:
+    name: WhatsApp engine
+    description: WEBJS uses WhatsApp Web (recommended)
+
+network:
+  3000/tcp: WAHA Dashboard (QR Code) - not used for Ingress
