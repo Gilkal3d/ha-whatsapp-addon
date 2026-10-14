@@ -19,7 +19,13 @@ configuration:
     description: WAHA event that triggers publishing to MQTT
   api_key:
     name: WAHA API key
-    description: Protects the WAHA dashboard and API. Leave empty to disable
+    description: Protects the WAHA API. Leave empty to generate one automatically (shown in the log)
+  dashboard_user:
+    name: WAHA panel username
+    description: Dashboard/Swagger login user (only used when a password is set)
+  dashboard_password:
+    name: WAHA panel password
+    description: Leave empty to access without a password - the panel is behind Home Assistant login
   engine:
     name: WhatsApp engine
     description: WEBJS uses WhatsApp Web (recommended)
