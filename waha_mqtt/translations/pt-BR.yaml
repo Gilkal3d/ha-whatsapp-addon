@@ -19,7 +19,7 @@ configuration:
     description: Evento do WAHA que dispara a publicação no MQTT (message = só recebidas)
   api_key:
     name: Chave de API do WAHA
-    description: Deixe vazio para gerar e persistir uma chave automaticamente (aparece nos logs do add-on)
+    description: "Deixe vazio (recomendado na rede local) pra o painel conectar sem chave. Preencha pra exigir X-Api-Key em toda chamada à API"
   dashboard_user:
     name: Usuário do painel
     description: Usuário do dashboard e do Swagger do WAHA

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1
+
+- **Corrige Monitor de Eventos preso em CONNECTING... / API 401**: com `api_key`
+  vazio, o WAHA agora roda **sem exigir chave** (antes era gerada uma chave
+  aleatória que o painel não conhecia — nada conectava)
+- `api_key` preenchida continua protegendo a API normalmente
+
 ## 1.1.0
 
 - Adiciona opção `base_url` (`WAHA_BASE_URL`/`WAHA_PUBLIC_URL`) — corrige o

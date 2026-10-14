@@ -19,7 +19,7 @@ configuration:
     description: WAHA event that triggers publishing to MQTT (message = incoming only)
   api_key:
     name: WAHA API key
-    description: Leave empty to auto-generate and persist a key (shown in the add-on logs)
+    description: "Leave empty (recommended on LAN) so the dashboard connects without a key. Set a value to require X-Api-Key on every API call"
   dashboard_user:
     name: Dashboard username
     description: Username for the WAHA dashboard and Swagger

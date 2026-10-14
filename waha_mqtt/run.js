@@ -5,7 +5,6 @@
  * 3. Inicia o WAHA apontando o webhook pro bridge interno
  */
 const { spawn } = require("child_process");
-const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const bridge = require("./bridge");
@@ -105,30 +104,20 @@ const env = {
   WAHA_LOG_LEVEL: "info",
 };
 
-// API key do WAHA: usa a opção se existir; senão gera uma vez e persiste em /data.
-// Sem isso o WAHA gera uma chave nova a cada start (quebra o painel e automações).
-function resolveApiKey() {
-  if (options.api_key) return options.api_key;
-  const file = "/data/waha-api.key";
-  try {
-    const stored = fs.readFileSync(file, "utf8").trim();
-    if (stored) {
-      console.log(`[addon] API key do WAHA: ${stored}`);
-      return stored;
-    }
-  } catch (err) {
-    // primeira execução: gera abaixo
-  }
-  const generated = crypto.randomUUID().replace(/-/g, "");
-  try {
-    fs.writeFileSync(file, generated, { mode: 0o600 });
-  } catch (err) {
-    console.warn(`[addon] não foi possível persistir a API key: ${err.message}`);
-  }
-  console.log(`[addon] API key do WAHA: ${generated} (também em ${file})`);
-  return generated;
+// API key do WAHA:
+// - Opção preenchida  -> exige X-Api-Key em toda chamada (dashboard incluído,
+//   o painel precisa da chave em Settings > API Key).
+// - Opção vazia       -> DESLIGA a exigência. Sem isso o WAHA gera uma chave
+//   aleatória sozinho e o dashboard fica em "CONNECTING..." / 401 (Monitor de
+//   Eventos não conecta, sessões não aparecem). Adequado para rede local.
+if (options.api_key) {
+  env.WHATSAPP_API_KEY = options.api_key;
+  console.log("[addon] WAHA API key: usando a chave definida na configuração");
+} else {
+  env.WAHA_API_KEY = "";
+  env.WAHA_NO_API_KEY = "True";
+  console.log("[addon] WAHA API key: desligada (rede local) — defina a opção 'api_key' pra ativar");
 }
-env.WHATSAPP_API_KEY = resolveApiKey();
 
 // Painel/Swagger: usa as credenciais da opção.
 // Sem senha => o WAHA roda sem login e quem chega já está logado no HA (ingress).
