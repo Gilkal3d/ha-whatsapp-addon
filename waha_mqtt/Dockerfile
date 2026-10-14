@@ -1,14 +1,14 @@
-# Escolhe a tag do WAHA pela arquitetura do build:
-#   amd64   -> devlikeapro/waha:latest (imagem oficial x86_64)
-#   aarch64 -> devlikeapro/waha:arm    (imagem oficial ARM64)
-# O builder do HA passa BUILD_ARCH automaticamente.
-ARG BUILD_ARCH=amd64
+# Escolhe a tag do WAHA pela arquitetura do build (BuildKit define TARGETARCH):
+#   amd64 -> devlikeapro/waha:latest (imagem oficial x86_64)
+#   arm64 -> devlikeapro/waha:arm    (imagem oficial ARM64)
+# Build manual em ARM: passe --build-arg TARGETARCH=arm64
+ARG TARGETARCH=amd64
 
 FROM devlikeapro/waha:latest AS stage-amd64
-FROM devlikeapro/waha:arm AS stage-aarch64
+FROM devlikeapro/waha:arm AS stage-arm64
 
 # Seletor de estágio por arquitetura
-FROM stage-${BUILD_ARCH}
+FROM stage-${TARGETARCH}
 
 # Bridge MQTT (Node, mesma runtime do WAHA — sem Python extra)
 WORKDIR /opt/addon
