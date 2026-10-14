@@ -5,6 +5,7 @@
  * 3. Inicia o WAHA apontando o webhook pro bridge interno
  */
 const { spawn } = require("child_process");
+const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const bridge = require("./bridge");
@@ -18,6 +19,8 @@ function loadOptions() {
     mqtt_topic: "homeassistant/whatsapp/incoming",
     hook_events: "message",
     api_key: "",
+    dashboard_user: "admin",
+    dashboard_password: "",
     engine: "WEBJS",
   };
   try {
@@ -86,7 +89,47 @@ const env = {
   WHATSAPP_STORE_ENGINE: "JsonWebStore",
   WHATSAPP_AUTO_RESTART: "true",
 };
-if (options.api_key) env.WHATSAPP_APIKEY = options.api_key;
+// API key do WAHA: usa a opção se existir; senão gera uma vez e persiste em /data.
+// Sem isso o WAHA gera uma chave nova a cada start (quebra o painel e automações).
+function resolveApiKey() {
+  if (options.api_key) return options.api_key;
+  const file = "/data/waha-api.key";
+  try {
+    const stored = fs.readFileSync(file, "utf8").trim();
+    if (stored) {
+      console.log(`[addon] API key do WAHA: ${stored}`);
+      return stored;
+    }
+  } catch (err) {
+    // primeira execução: gera abaixo
+  }
+  const generated = crypto.randomUUID().replace(/-/g, "");
+  try {
+    fs.writeFileSync(file, generated, { mode: 0o600 });
+  } catch (err) {
+    console.warn(`[addon] não foi possível persistir a API key: ${err.message}`);
+  }
+  console.log(`[addon] API key do WAHA: ${generated} (também em ${file})`);
+  return generated;
+}
+env.WHATSAPP_API_KEY = resolveApiKey();
+
+// Painel/Swagger: usa as credenciais da opção.
+// Sem senha => o WAHA roda sem login e quem chega já está logado no HA (ingress).
+if (options.dashboard_password) {
+  const user = options.dashboard_user || "admin";
+  env.WAHA_DASHBOARD_USERNAME = user;
+  env.WAHA_DASHBOARD_PASSWORD = options.dashboard_password;
+  env.WHATSAPP_SWAGGER_USERNAME = user;
+  env.WHATSAPP_SWAGGER_PASSWORD = options.dashboard_password;
+} else {
+  env.WAHA_DASHBOARD_USERNAME = options.dashboard_user || "admin";
+  env.WAHA_DASHBOARD_PASSWORD = "";
+  env.WAHA_DASHBOARD_NO_PASSWORD = "true";
+  env.WHATSAPP_SWAGGER_USERNAME = options.dashboard_user || "admin";
+  env.WHATSAPP_SWAGGER_PASSWORD = "";
+  env.WHATSAPP_SWAGGER_NO_PASSWORD = "true";
+}
 
 // O entrypoint do WAHA roda `node dist/main` com caminho relativo,
 // então o cwd precisa ser /app (o WORKDIR original da imagem WAHA).
