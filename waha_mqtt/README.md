@@ -28,7 +28,7 @@ WhatsApp Web ←celular→ WAHA (add-on) → bridge interno → MQTT → automat
 | `mqtt_port` | `1883` | Porta do broker |
 | `mqtt_user` / `mqtt_password` | vazio | Credenciais do broker |
 | `mqtt_topic` | `homeassistant/whatsapp/incoming` | Tópico de saída |
-| `hook_events` | `message.received` | Evento do WAHA que publica |
+| `hook_events` | `message` | Evento do WAHA que publica |
 | `api_key` | vazio | Protege o dashboard WAHA |
 | `engine` | `WEBJS` | Engine (WEBJS = WhatsApp Web) |
 
