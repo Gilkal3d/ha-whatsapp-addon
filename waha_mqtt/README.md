@@ -33,6 +33,20 @@ WhatsApp Web ←celular→ WAHA (add-on) → bridge interno → MQTT → automat
 | `dashboard_user` | `admin` | Usuário do painel (só com senha) |
 | `dashboard_password` | vazio | Senha do painel; vazia = sem login (ingress do HA) |
 | `engine` | `WEBJS` | Engine (WEBJS = WhatsApp Web) |
+| `pulse_seconds` | `10` | Duração do pulso do `switch.whatsapp_pulso` |
+
+### Entidades criadas automaticamente (MQTT Discovery)
+
+| Entidade | Tipo | Descrição |
+|---|---|---|
+| `sensor.whatsapp_status` | sensor (connectivity) | Sessão do WAHA ON/OFF |
+| `text.whatsapp_filtro` | text | Campo pra digitar o ID do remetente gatilho |
+| `switch.whatsapp_pulso` | switch | Pulso quando o contato filtrado envia mensagem |
+
+As entidades aparecem no dispositivo **"WhatsApp (WAHA)"** em
+**Configurações → Dispositivos e Serviços → MQTT**. Digite o ID (telefone ou
+LID) no `text.whatsapp_filtro` e use o `switch.whatsapp_pulso` como trigger
+nas suas automações — sem escrever YAML.
 
 Se você ainda não tem MQTT: **Configuração → Integrações → Adicionar → Mosquitto
 broker**, crie usuário/senha e preencha acima.

@@ -32,6 +32,9 @@ configuration:
   base_url:
     name: WAHA base URL
     description: "Public address of this add-on, e.g. http://10.207.100.79:3000 - fixes the dashboard pointing to 127.0.0.1. Leave empty for default"
+  pulse_seconds:
+    name: Pulse duration (seconds)
+    description: How long the WhatsApp Pulse switch stays ON after a message from the filtered contact arrives
 
 network:
   3000/tcp: WAHA Dashboard (QR Code) - not used for Ingress

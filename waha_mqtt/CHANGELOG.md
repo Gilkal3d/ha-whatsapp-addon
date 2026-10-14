@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.2.0
+
+- **Entities automáticas no HA via MQTT Discovery** (criadas sozinhas ao
+  instalar/atualizar o add-on, agrupadas no dispositivo "WhatsApp (WAHA)"):
+  - `sensor.whatsapp_status` — connectivity ON/OFF da sessão do WAHA
+    (poll a cada 30s na API + atualiza ao receber mensagem)
+  - `text.whatsapp_filtro` — campo no HA pra digitar o ID/telefone do
+    remetente que dispara o pulso (aceita vários separados por vírgula;
+    aceita número `5511993503114` ou LID `117192595091647`); persiste em
+    `/data/waha-filter.txt` e sobrevive a reinícios
+  - `switch.whatsapp_pulso` — interruptor de pulso que liga (ON) quando
+    chega mensagem do remetente filtrado e desliga sozinho após
+    `pulse_seconds` (atributos: `de`, `texto`, `em`); também aceita
+    comando ON/OFF manual
+- Availability MQTT (LWT): entities ficam "unavailable" se o bridge cair
+- Opção `pulse_seconds` (padrão 10)
+
 ## 1.1.1
 
 - **Corrige Monitor de Eventos preso em CONNECTING... / API 401**: com `api_key`

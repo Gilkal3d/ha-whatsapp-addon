@@ -66,13 +66,16 @@ function linkSessionToData() {
 const options = loadOptions();
 linkSessionToData();
 
-// --- Bridge MQTT (webhook WAHA -> MQTT) ---
+// --- Bridge MQTT (webhook WAHA -> MQTT + entities via Discovery) ---
 bridge.start({
   mqttHost: options.mqtt_host,
   mqttPort: options.mqtt_port,
   mqttUser: options.mqtt_user,
   mqttPassword: options.mqtt_password,
   mqttTopic: options.mqtt_topic,
+  pulseSeconds: options.pulse_seconds,
+  wahaUrl: "http://127.0.0.1:3000",
+  wahaApiKey: options.api_key || "",
 });
 
 // O WAHA (imagens recentes) rejeita eventos legados como "message.received".
