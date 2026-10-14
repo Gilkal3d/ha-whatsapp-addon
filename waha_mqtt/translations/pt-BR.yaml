@@ -19,7 +19,13 @@ configuration:
     description: Evento do WAHA que dispara a publicação no MQTT
   api_key:
     name: Chave de API do WAHA
-    description: Protege o dashboard e a API do WAHA. Deixe vazio para desativar
+    description: Protege a API do WAHA. Deixe vazio para gerar uma automaticamente (aparece no log)
+  dashboard_user:
+    name: Usuário do painel WAHA
+    description: Usuário do login do dashboard/Swagger (usado só quando há senha)
+  dashboard_password:
+    name: Senha do painel WAHA
+    description: Deixe vazio para entrar sem senha — o painel fica atrás do login do Home Assistant
   engine:
     name: Engine do WhatsApp
     description: WEBJS usa o WhatsApp Web (recomendado)
