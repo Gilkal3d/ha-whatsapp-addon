@@ -16,13 +16,16 @@ configuration:
     description: Tópico onde as mensagens recebidas do WhatsApp são publicadas
   hook_events:
     name: Evento do WAHA
-    description: Evento do WAHA que dispara a publicação no MQTT
+    description: Evento do WAHA que dispara a publicação no MQTT (message = só recebidas)
   api_key:
     name: Chave de API do WAHA
-    description: Protege o dashboard e a API do WAHA. Deixe vazio para desativar
+    description: Exige X-Api-Key em toda chamada à API/dashboard. Vazio = sem chave (rede local)
   engine:
     name: Engine do WhatsApp
     description: WEBJS usa o WhatsApp Web (recomendado)
+  base_url:
+    name: URL base do WAHA
+    description: "Endereço público deste add-on, ex.: http://10.0.0.5:3000 - vazio = padrão"
 
 network:
   3000/tcp: Dashboard WAHA (QR Code) - não usado no Ingress

@@ -1,5 +1,5 @@
 name: "WhatsApp Web (WAHA) + MQTT"
-version: "1.0.0"
+version: "1.1.0"
 slug: waha_mqtt
 description: "Mantém uma sessão do WhatsApp Web e publica mensagens recebidas no MQTT do Home Assistant"
 url: "https://github.com/Gilkal3d/ha-whatsapp-addon"
@@ -31,9 +31,10 @@ options:
   mqtt_user: ""
   mqtt_password: ""
   mqtt_topic: homeassistant/whatsapp/incoming
-  hook_events: message.received
+  hook_events: message
   api_key: ""
   engine: WEBJS
+  base_url: ""
 
 schema:
   mqtt_host: str
@@ -41,6 +42,7 @@ schema:
   mqtt_user: str?
   mqtt_password: password?
   mqtt_topic: str
-  hook_events: list(message|message.received|message.any)
+  hook_events: list(message|message.any|session.status|message.reaction)
   api_key: str?
   engine: list(WEBJS|NOWEB|GOWS)
+  base_url: str?

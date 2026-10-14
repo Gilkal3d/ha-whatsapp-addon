@@ -40,7 +40,7 @@ function publish(obj) {
 function extractMessage(payload) {
   const msg = payload.payload || payload;
   const event = payload.event;
-  if (event && !["message.received", "message", "message.any"].includes(event)) {
+  if (event && !["message", "message.any"].includes(event)) {
     return null;
   }
   const data = msg._data || {};

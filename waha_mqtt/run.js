@@ -16,9 +16,10 @@ function loadOptions() {
     mqtt_user: "",
     mqtt_password: "",
     mqtt_topic: "homeassistant/whatsapp/incoming",
-    hook_events: "message.received",
+    hook_events: "message",
     api_key: "",
     engine: "WEBJS",
+    base_url: "",
   };
   try {
     return { ...defaults, ...JSON.parse(fs.readFileSync("/data/options.json", "utf8")) };
@@ -28,32 +29,19 @@ function loadOptions() {
   }
 }
 
-function linkSessionToData() {
-  // Persiste a sessão do WhatsApp em /data (sobrevive a update do add-on)
-  const dataDir = "/data/waha";
-  const appDir = "/app/.waha";
-  try {
-    fs.mkdirSync(dataDir, { recursive: true });
-    if (fs.existsSync(appDir)) {
-      const stat = fs.lstatSync(appDir);
-      if (stat.isDirectory() && !stat.isSymbolicLink()) {
-        // Primeira execução antiga com dados locais: move pra /data
-        for (const entry of fs.readdirSync(appDir)) {
-          fs.renameSync(path.join(appDir, entry), path.join(dataDir, entry));
-        }
-        fs.rmdirSync(appDir);
-      } else {
-        fs.unlinkSync(appDir);
-      }
+function ensureDataDirs() {
+  // Persistência em /data (sobrevive a update do add-on)
+  for (const dir of ["/data/sessions", "/data/files"]) {
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+    } catch (err) {
+      console.warn(`[addon] não criei ${dir}: ${err.message}`);
     }
-    fs.symlinkSync(dataDir, appDir, "dir");
-  } catch (err) {
-    console.warn(`[addon] não foi possível vincular sessão a /data: ${err.message}`);
   }
 }
 
 const options = loadOptions();
-linkSessionToData();
+ensureDataDirs();
 
 // --- Bridge MQTT (webhook WAHA -> MQTT) ---
 bridge.start({
@@ -67,13 +55,37 @@ bridge.start({
 // --- WAHA ---
 const env = {
   ...process.env,
+  // Webhook interno (mesmo container)
   WHATSAPP_HOOK_URL: "http://127.0.0.1:9090/webhook",
   WHATSAPP_HOOK_EVENTS: options.hook_events,
   WHATSAPP_DEFAULT_ENGINE: options.engine,
-  WHATSAPP_STORE_ENGINE: "JsonWebStore",
-  WHATSAPP_AUTO_RESTART: "true",
+  // Persistência de sessao e arquivos em /data
+  WAHA_LOCAL_STORE_BASE_DIR: "/data/sessions",
+  WHATSAPP_FILES_FOLDER: "/data/files",
+  // QR tambem aparece nos logs (fallback pra escanear)
+  WAHA_PRINT_QR: "True",
+  WAHA_LOG_LEVEL: "info",
 };
-if (options.api_key) env.WHATSAPP_APIKEY = options.api_key;
+
+// API key: se vazia -> desliga a exigencia de chave (rede local).
+// Se preenchida -> exige X-Api-Key em toda chamada a API.
+if (options.api_key) {
+  env.WAHA_API_KEY = options.api_key;
+  env.WAHA_API_KEY_PLAIN = options.api_key;
+} else {
+  env.WAHA_NO_API_KEY = "True";
+  env.WAHA_API_KEY = "";
+}
+
+// URL base (ex.: http://10.207.100.79:3000) - usada em media.url, webhook e dashboard
+if (options.base_url) {
+  env.WAHA_BASE_URL = options.base_url;
+  env.WAHA_PUBLIC_URL = options.base_url;
+}
+
+console.log(
+  `[addon] WAHA iniciando | engine=${options.engine} | eventos=${options.hook_events} | api_key=${options.api_key ? "definida" : "desligada"} | base_url=${options.base_url || "(padrao)"}`
+);
 
 const waha = spawn("/entrypoint.sh", [], { env, stdio: "inherit" });
 
