@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.1
+
+- **Corrige o campo `text.whatsapp_filtro` não salvar**: o bridge assinava os
+  tópicos de comando mas faltava registrar o handler `message` — o valor
+  digitado no HA era ignorado. Agora salva, persiste em `/data/waha-filter.txt`
+  e reflete no campo
+- O `switch.whatsapp_pulso` dispara conforme o ID configurado no filtro
+  (busca por trecho em `from`/`chat`, igual à regra Jinja manual)
+
 ## 1.2.0
 
 - **Entities automáticas no HA via MQTT Discovery** (criadas sozinhas ao

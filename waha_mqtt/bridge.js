@@ -271,6 +271,9 @@ function connect(config) {
   });
   client.on("error", (err) => console.error(`[bridge] MQTT erro: ${err.message}`));
   client.on("offline", () => console.warn("[bridge] MQTT offline, reconectando..."));
+  // SEM isto os comandos do HA (filtro/pulso) são ignorados:
+  // o bridge assina os tópicos mas precisa processar as mensagens recebidas.
+  client.on("message", onMqttMessage);
 }
 
 function publish(obj) {

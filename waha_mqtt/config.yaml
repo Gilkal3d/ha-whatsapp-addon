@@ -1,5 +1,5 @@
 name: "WhatsApp Web (WAHA) + MQTT"
-version: "1.2.0"
+version: "1.2.1"
 slug: waha_mqtt
 description: "Mantém uma sessão do WhatsApp Web e publica mensagens recebidas no MQTT do Home Assistant"
 url: "https://github.com/Gilkal3d/ha-whatsapp-addon"
