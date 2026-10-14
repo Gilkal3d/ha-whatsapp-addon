@@ -28,8 +28,10 @@ WhatsApp Web ←celular→ WAHA (add-on) → bridge interno → MQTT → automat
 | `mqtt_port` | `1883` | Porta do broker |
 | `mqtt_user` / `mqtt_password` | vazio | Credenciais do broker |
 | `mqtt_topic` | `homeassistant/whatsapp/incoming` | Tópico de saída |
-| `hook_events` | `message.received` | Evento do WAHA que publica |
-| `api_key` | vazio | Protege o dashboard WAHA |
+| `hook_events` | `message` | Evento do WAHA que publica |
+| `api_key` | vazio (gera uma) | Chave da API do WAHA — aparece no log |
+| `dashboard_user` | `admin` | Usuário do painel (só com senha) |
+| `dashboard_password` | vazio | Senha do painel; vazia = sem login (ingress do HA) |
 | `engine` | `WEBJS` | Engine (WEBJS = WhatsApp Web) |
 
 Se você ainda não tem MQTT: **Configuração → Integrações → Adicionar → Mosquitto

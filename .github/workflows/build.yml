@@ -23,12 +23,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build add-on (amd64 + aarch64)
-        uses: home-assistant/builder@master
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Lê a versão do add-on
+        id: version
+        run: |
+          VERSION=$(grep -m1 '^version:' waha_mqtt/config.yaml | sed 's/.*"\(.*\)".*/\1/')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      # Uma única build multi-platform = manifesto multi-arch (amd64 + arm64)
+      # em vez de duas builds disputando a mesma tag.
+      - name: Build and push (amd64 + arm64)
+        uses: docker/build-push-action@v6
         with:
-          args: |
-            --amd64 \
-            --aarch64 \
-            --target waha_mqtt \
-            --image "${{ github.repository_owner }}/waha_mqtt" \
-            --docker-hub "ghcr.io"
+          context: ./waha_mqtt
+          platforms: linux/amd64,linux/arm64
+          push: true
+          provenance: false
+          tags: |
+            ghcr.io/gilkal3d/waha_mqtt:latest
+            ghcr.io/gilkal3d/waha_mqtt:${{ steps.version.outputs.version }}

@@ -19,13 +19,19 @@ configuration:
     description: Evento do WAHA que dispara a publicação no MQTT (message = só recebidas)
   api_key:
     name: Chave de API do WAHA
-    description: Exige X-Api-Key em toda chamada à API/dashboard. Vazio = sem chave (rede local)
+    description: Deixe vazio para gerar e persistir uma chave automaticamente (aparece nos logs do add-on)
+  dashboard_user:
+    name: Usuário do painel
+    description: Usuário do dashboard e do Swagger do WAHA
+  dashboard_password:
+    name: Senha do painel
+    description: Deixe vazio para rodar o painel sem tela de login
   engine:
     name: Engine do WhatsApp
     description: WEBJS usa o WhatsApp Web (recomendado)
   base_url:
     name: URL base do WAHA
-    description: "Endereço público deste add-on, ex.: http://10.0.0.5:3000 - vazio = padrão"
+    description: "Endereço público deste add-on, ex.: http://10.207.100.79:3000 - corrige o painel apontando pra 127.0.0.1. Vazio = padrão"
 
 network:
   3000/tcp: Dashboard WAHA (QR Code) - não usado no Ingress

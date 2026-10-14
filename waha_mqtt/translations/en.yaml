@@ -19,13 +19,19 @@ configuration:
     description: WAHA event that triggers publishing to MQTT (message = incoming only)
   api_key:
     name: WAHA API key
-    description: Require X-Api-Key on every API/dashboard call. Leave empty for LAN (no key)
+    description: Leave empty to auto-generate and persist a key (shown in the add-on logs)
+  dashboard_user:
+    name: Dashboard username
+    description: Username for the WAHA dashboard and Swagger
+  dashboard_password:
+    name: Dashboard password
+    description: Leave empty to run the dashboard without a login prompt
   engine:
     name: WhatsApp engine
     description: WEBJS uses WhatsApp Web (recommended)
   base_url:
     name: WAHA base URL
-    description: "Public address of this add-on, e.g. http://10.0.0.5:3000 - leave empty for default"
+    description: "Public address of this add-on, e.g. http://10.207.100.79:3000 - fixes the dashboard pointing to 127.0.0.1. Leave empty for default"
 
 network:
   3000/tcp: WAHA Dashboard (QR Code) - not used for Ingress

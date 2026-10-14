@@ -2,12 +2,23 @@
 
 ## 1.1.0
 
-- Corrige API key: usa `WAHA_API_KEY`/`WAHA_NO_API_KEY` (antes a variável era ignorada e o dashboard levava 401)
-- Corrige evento de webhook: `message` (o WAHA não possui `message.received`)
-- Adiciona opção `base_url` (define `WAHA_BASE_URL`/`WAHA_PUBLIC_URL` — corrige dashboard apontando pra 127.0.0.1)
-- Persistência correta da sessão em `/data/sessions` (antes `/app/.waha`, que era ignorado)
-- QR code também impresso nos logs (`WAHA_PRINT_QR=True`) como fallback
-- Log de diagnóstico do add-on no startup
+- Adiciona opção `base_url` (`WAHA_BASE_URL`/`WAHA_PUBLIC_URL`) — corrige o
+  dashboard apontando pra `127.0.0.1:3000` em vez do endereço do HA
+- Persistência oficial da sessão via `WAHA_LOCAL_STORE_BASE_DIR=/data/sessions`
+  (mantém o vínculo legado `/app/.waha` para compatibilidade)
+- Mídia persistida em `/data/files` (`WHATSAPP_FILES_FOLDER`)
+- `WAHA_PRINT_QR=True`: QR também sai nos logs como fallback de escaneamento
+- Log de diagnóstico no startup (engine, eventos, base_url)
+- Bridge ignora apenas `message`/`message.any` (evento legado `message.received`
+  é normalizado para `message` pelo run.js)
+
+## 1.0.4
+
+- Build multi-arch via buildx (manifesto amd64 + arm64 numa tag só)
+- `cwd /app` no spawn do entrypoint (o WAHA usa caminho relativo)
+- API key gerada uma vez e persistida em `/data/waha-api.key`
+- Opções de dashboard (`dashboard_user`/`dashboard_password`)
+- Normalização de `hook_events` legado
 
 ## 1.0.0
 
