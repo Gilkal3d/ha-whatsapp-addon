@@ -16,7 +16,7 @@ function loadOptions() {
     mqtt_user: "",
     mqtt_password: "",
     mqtt_topic: "homeassistant/whatsapp/incoming",
-    hook_events: "message.received",
+    hook_events: "message",
     api_key: "",
     engine: "WEBJS",
   };
@@ -64,11 +64,24 @@ bridge.start({
   mqttTopic: options.mqtt_topic,
 });
 
+// O WAHA (imagens recentes) rejeita eventos legados como "message.received".
+// Converte para o nome atual equivalente antes de exportar para o processo.
+const LEGACY_HOOK_EVENTS = { "message.received": "message" };
+function normalizeHookEvents(raw) {
+  return String(raw || "message")
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean)
+    .map((e) => LEGACY_HOOK_EVENTS[e] || e)
+    .filter((e, i, all) => all.indexOf(e) === i)
+    .join(",");
+}
+
 // --- WAHA ---
 const env = {
   ...process.env,
   WHATSAPP_HOOK_URL: "http://127.0.0.1:9090/webhook",
-  WHATSAPP_HOOK_EVENTS: options.hook_events,
+  WHATSAPP_HOOK_EVENTS: normalizeHookEvents(options.hook_events),
   WHATSAPP_DEFAULT_ENGINE: options.engine,
   WHATSAPP_STORE_ENGINE: "JsonWebStore",
   WHATSAPP_AUTO_RESTART: "true",
