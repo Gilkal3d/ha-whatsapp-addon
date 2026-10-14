@@ -31,7 +31,9 @@ jobs:
 
       - name: Lê a versão do add-on
         id: version
-        run: echo "version=$(sed -n 's/^version: *\"\(.*\)\"/\1/p' waha_mqtt/config.yaml | head -n1)" >> "$GITHUB_OUTPUT"
+        run: |
+          VERSION=$(grep -m1 '^version:' waha_mqtt/config.yaml | sed 's/.*"\(.*\)".*/\1/')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       # Uma única build multi-platform = manifesto multi-arch (amd64 + arm64)
       # em vez de duas builds disputando a mesma tag.
