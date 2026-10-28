@@ -22,6 +22,7 @@ function loadOptions() {
     dashboard_password: "",
     engine: "WEBJS",
     base_url: "",
+    store_media: false,
   };
   try {
     return { ...defaults, ...JSON.parse(fs.readFileSync("/data/options.json", "utf8")) };
@@ -66,6 +67,22 @@ function linkSessionToData() {
 const options = loadOptions();
 linkSessionToData();
 
+const storeMedia = options.store_media === true;
+
+// Mídia desligada: apaga fotos/vídeos/arquivos que o WAHA tenha gravado em
+// /data/files (limpeza automática a cada start — a sessão em /data/waha e
+// /data/sessions não é tocada).
+if (!storeMedia) {
+  try {
+    for (const entry of fs.readdirSync("/data/files")) {
+      fs.rmSync(path.join("/data/files", entry), { recursive: true, force: true });
+    }
+    console.log("[addon] store_media=off — /data/files limpo");
+  } catch (err) {
+    console.warn(`[addon] não consegui limpar /data/files: ${err.message}`);
+  }
+}
+
 // --- Bridge MQTT (webhook WAHA -> MQTT + entities via Discovery) ---
 bridge.start({
   mqttHost: options.mqtt_host,
@@ -102,6 +119,12 @@ const env = {
   // Persistência de sessão e mídia em /data (sobrevive a update)
   WAHA_LOCAL_STORE_BASE_DIR: "/data/sessions",
   WHATSAPP_FILES_FOLDER: "/data/files",
+  // Mídia: store_media=false não baixa nada (fotos/vídeos chegam só como
+  // metadados com url:null); true baixa e guarda pra sempre (lifetime=0).
+  WAHA_EVENTS_DOWNLOAD_MEDIA: storeMedia ? "true" : "false",
+  WAHA_API_DOWNLOAD_MEDIA: storeMedia ? "true" : "false",
+  WHATSAPP_DOWNLOAD_MEDIA: storeMedia ? "true" : "false", // fallback engines antigas
+  WHATSAPP_FILES_LIFETIME: storeMedia ? "0" : "180",
   // QR também sai nos logs — fallback pra escanear se o painel falhar
   WAHA_PRINT_QR: "True",
   WAHA_LOG_LEVEL: "info",

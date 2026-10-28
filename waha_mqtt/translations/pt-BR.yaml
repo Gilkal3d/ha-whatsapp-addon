@@ -35,6 +35,9 @@ configuration:
   pulse_seconds:
     name: Duração do pulso (segundos)
     description: Por quantos segundos o interruptor WhatsApp Pulso fica ligado quando chega mensagem do contato filtrado
+  store_media:
+    name: Armazenar mídia (fotos/vídeos)
+    description: "Desligado (recomendado): o WAHA não baixa mídia recebida e apaga o que existir em /data/files ao iniciar. Ligado: baixa e guarda para sempre"
 
 network:
   3000/tcp: Dashboard WAHA (QR Code) - não usado no Ingress

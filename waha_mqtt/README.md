@@ -34,6 +34,7 @@ WhatsApp Web ←celular→ WAHA (add-on) → bridge interno → MQTT → automat
 | `dashboard_password` | vazio | Senha do painel; vazia = sem login (ingress do HA) |
 | `engine` | `WEBJS` | Engine (WEBJS = WhatsApp Web) |
 | `pulse_seconds` | `10` | Duração do pulso do `switch.whatsapp_pulso` |
+| `store_media` | `false` | `false`: não baixa fotos/vídeos recebidos e limpa `/data/files` ao iniciar. `true`: baixa e mantém pra sempre |
 
 ### Entidades criadas automaticamente (MQTT Discovery)
 
@@ -104,6 +105,7 @@ Payload publicado:
 | Nada publica no MQTT | Confera `mqtt_host/user/password` nos logs do add-on |
 | Evento antigo do WAHA | Mude `hook_events` pra `message` |
 | Trocar de número | Apague `/data/waha` pelo Samba/SSH e pareie de novo |
+| Quer salvar as fotos/vídeos recebidos | Ligue `store_media` na configuração e reinicie o add-on |
 
 ## Publicando no GitHub (build automático)
 

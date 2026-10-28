@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+- **Nova opção `store_media` (padrão: desligado)**: o WAHA deixa de baixar
+  fotos/vídeos/arquivos recebidos (`WAHA_EVENTS_DOWNLOAD_MEDIA=false`,
+  `WAHA_API_DOWNLOAD_MEDIA=false`) e, **ao iniciar, apaga tudo que existir em
+  `/data/files`** — a sessão (`/data/waha`, `/data/sessions`) e o filtro
+  não são tocados
+- Com `store_media` ligado: a mídia é baixada e mantida para sempre
+  (`WHATSAPP_FILES_LIFETIME=0`)
+
 ## 1.2.1
 
 - **Corrige o campo `text.whatsapp_filtro` não salvar**: o bridge assinava os

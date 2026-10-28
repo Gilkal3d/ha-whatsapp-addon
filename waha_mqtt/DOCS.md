@@ -41,6 +41,14 @@ O payload publicado é:
 Use `trigger.payload_json.from` na condição da automação para ativar somente
 quando **aquele contato** escrever.
 
+## Mídia (fotos e vídeos)
+
+Por padrão (`store_media` desligado) o add-on **não baixa** a mídia recebida —
+economiza banda/CPU e não ocupa disco; a mensagem chega com os metadados e
+`url: null`. Ao iniciar, o conteúdo de `/data/files` é apagado. Ligue
+`store_media` na aba **Configuração** se quiser receber e guardar os arquivos
+(`WHATSAPP_FILES_LIFETIME=0` — ficam pra sempre; a limpeza no start para).
+
 ## Dicas
 
 - Sessão persistente em `/data/waha` (sobrevive a updates).

@@ -35,6 +35,9 @@ configuration:
   pulse_seconds:
     name: Pulse duration (seconds)
     description: How long the WhatsApp Pulse switch stays ON after a message from the filtered contact arrives
+  store_media:
+    name: Store media (photos/videos)
+    description: "Off (recommended): WAHA does not download incoming media and clears /data/files on start. On: downloads and keeps files forever"
 
 network:
   3000/tcp: WAHA Dashboard (QR Code) - not used for Ingress
